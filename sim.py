@@ -6,6 +6,8 @@ Interactive accretion / spin-evolution laboratory built on PSR J1023+0038.
     python sim.py --cpu           force the CPU backend
     python sim.py --check         run the scientific validation suite (no window)
     python sim.py --provenance    print what is observed / computed / simplified
+    python sim.py --demo          scripted feed -> heavy -> starve sequence for recording
+                                  (--demo-duration 90 for a longer take)
     python sim.py --seed 7        deterministic seed for procedural visuals
     python sim.py --warp 4        initial time-warp preset index (see config.TIME_WARPS)
     python sim.py --rate 3600     simulation seconds per real second (any positive float)
@@ -35,6 +37,8 @@ def main(argv=None):
     p.add_argument("--control", type=float, default=0.5, help="initial accretion control 0..1")
     p.add_argument("--frames", type=int, default=0, help="exit after N frames (0 = run until closed)")
     p.add_argument("--headless", action="store_true", help="do not show the window (with --frames)")
+    p.add_argument("--demo", action="store_true", help="scripted 50 %% -> 100 %% -> 0 %% feed/starve sequence, then exit")
+    p.add_argument("--demo-duration", type=float, default=60.0, help="length of the demo sequence in real seconds")
     args = p.parse_args(argv)
 
     if args.provenance:
@@ -47,7 +51,8 @@ def main(argv=None):
 
     from simulation import RunConfig, Simulation
     run = RunConfig(seed=args.seed, force_cpu=args.cpu, control=args.control, warp_index=args.warp,
-                    sim_seconds_per_real_second=args.rate, max_frames=args.frames, show_window=not args.headless)
+                    sim_seconds_per_real_second=args.rate, max_frames=args.frames, show_window=not args.headless,
+                    demo=args.demo, demo_duration=args.demo_duration)
     return Simulation(run).loop()
 
 

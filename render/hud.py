@@ -56,7 +56,7 @@ class Hud:
         gui = window.get_gui()
 
         # --- control panel ---------------------------------------------------
-        with gui.sub_window("FEED THE BEAST  -  " + cfg.REF_SYSTEM_NAME, 0.01, 0.01, 0.31, 0.33):
+        with gui.sub_window("FEED THE BEAST  -  " + cfg.REF_SYSTEM_NAME, 0.01, 0.01, 0.31, 0.36):
             model.set_control(gui.slider_float("ACCRETION RATE  0 % .. 100 %", model.control, 0.0, 1.0))
             lines = control_lines(t, model.warp_label, camera_name, sim.backend, sim.fps)
             gui.text(lines[0])
@@ -68,6 +68,8 @@ class Hud:
                 sim.restart()
             for line in lines[1:]:
                 gui.text(line)
+            if sim.demo is not None:
+                gui.text(sim.demo.label, color=(1.0, 0.85, 0.4))
 
         # --- telemetry (single panel; every value from model.telemetry()) ----
         with gui.sub_window("TELEMETRY", 0.58, 0.01, 0.41, 0.52):

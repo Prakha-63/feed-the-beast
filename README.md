@@ -34,6 +34,7 @@ python sim.py
 | Simulation | `SPACE` pause/resume · `R` reset · `T` restart · `ESC` quit |
 
 ```bash
+python sim.py --demo         # scripted 50 % -> 100 % -> 0 % sequence for recording (--demo-duration 90)
 python sim.py --check        # scientific validation of the core equations
 python sim.py --provenance   # full observed / computed / simplified table
 python -m unittest discover -s tests

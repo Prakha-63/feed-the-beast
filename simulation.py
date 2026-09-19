@@ -26,6 +26,8 @@ class RunConfig:
     warp_index: int = cfg.DEFAULT_WARP_INDEX
     sim_seconds_per_real_second: float = None   # explicit rate overrides warp_index
     max_frames: int = 0                  # >0: exit after N frames (smoke tests)
+    demo: bool = False                   # scripted feed/starve sequence (demo.py)
+    demo_duration: float = 60.0          # seconds of real time for the whole sequence
     show_window: bool = True
     vsync: bool = True
 
@@ -62,6 +64,10 @@ class Simulation:
         self.frame = 0
         self.fps = 0.0
         self.running = True
+        self.demo = None
+        if run.demo:
+            from demo import DemoScript
+            self.demo = DemoScript(run.demo_duration)
 
     # ------------------------------------------------------------ hooks
     def _apply_initial_state(self):
@@ -149,6 +155,10 @@ class Simulation:
             last = now
             if self.run.show_window:          # input polling needs a visible window
                 self._handle_events()
+            if self.demo is not None:
+                self.demo.update(self, real_dt)   # drives only the accretion control
+                if self.demo.done:
+                    self.running = False
             self.step_frame(real_dt)
             fps_n += 1
             if now - fps_t >= 0.5:
