@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Taichi GGUI runtime state (window layout) and kernel cache
+imgui.ini
+.taichi_cache/
+
+# Local tool / IDE configuration
+.claude/
+.vscode/
+.idea/
+
+# Logs and captured frames
+*.log
+*.png
+!docs/*.png
